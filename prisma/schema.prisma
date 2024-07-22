@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  // Uses connection pooling
+ // url = env("POSTGRES_PRISMA_URL")
+ url = env("DATABASE_URL")
+  // Uses direct connection, ⚠️ make sure to keep this to `POSTGRES_URL_NON_POOLING`
+  // or you'll have dangling databases from migrations
+  //directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model PreguntaContacto {
+  pregunta_id          Int @id @default(autoincrement())
+  pregunta_name        String
+  pregunta_email       String
+  pregunta_message     String
+  pregunta_created_at  DateTime @default(now())
+
+  respuestaContacto RespuestaContacto []
+}
+
+model RespuestaContacto {
+  respuesta_id          Int @id @default(autoincrement())
+  respuesta_message     String
+  respuesta_created_at  DateTime @default(now())
+  
+  pregunta_id           Int 
+  preguntaContacto PreguntaContacto @relation(fields: [pregunta_id], references: [pregunta_id])
+}
