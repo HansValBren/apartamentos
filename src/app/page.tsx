@@ -4,11 +4,11 @@ import ContactoForm from "@/components/contacto/ContactoForm"
 export default function Home() {
   return (  
     <div className="flex flex-col min-h-screen">
-     <section id="hero" className="bg-muted py-24 px-24 md:py-16 lg:py-20 h-screen flex items-center">
+     <section id="hero" className="bg-muted min-h-screen px-24 flex">
       <Hero />
      </section>
 
-     <section id="bienes" className="px-24 py-10 md:py-16 lg:py-20">
+     <section id="inmuebles" className="min-h-screen flex items-center py-20 px-24">
       <Inmueble />
      </section>
 

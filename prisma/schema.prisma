@@ -1,38 +1,51 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  // Uses connection pooling
- // url = env("POSTGRES_PRISMA_URL")
- url = env("DATABASE_URL")
-  // Uses direct connection, ⚠️ make sure to keep this to `POSTGRES_URL_NON_POOLING`
-  // or you'll have dangling databases from migrations
-  //directUrl = env("POSTGRES_URL_NON_POOLING")
+  url      = env("DATABASE_URL")
 }
 
 model PreguntaContacto {
-  pregunta_id          Int @id @default(autoincrement())
-  pregunta_name        String
-  pregunta_email       String
-  pregunta_message     String
-  pregunta_created_at  DateTime @default(now())
-
-  respuestaContacto RespuestaContacto []
+  pregunta_id         Int                @id @default(autoincrement())
+  pregunta_name       String
+  pregunta_email      String
+  pregunta_message    String
+  pregunta_created_at DateTime           @default(now())
+  pregunta_telefono     String
+  pregunta_seen        Boolean            @default(false)
+  respuestaContacto   RespuestaContacto?
 }
 
 model RespuestaContacto {
-  respuesta_id          Int @id @default(autoincrement())
-  respuesta_message     String
-  respuesta_created_at  DateTime @default(now())
-  
-  pregunta_id           Int 
-  preguntaContacto PreguntaContacto @relation(fields: [pregunta_id], references: [pregunta_id])
+  respuesta_id         Int              @id @default(autoincrement())
+  respuesta_message    String
+  respuesta_created_at DateTime         @default(now())
+  pregunta_id          Int              @unique
+  preguntaContacto     PreguntaContacto @relation(fields: [pregunta_id], references: [pregunta_id], onDelete: Cascade)
 }
+
+model User {
+  user_id         Int      @id @default(autoincrement())
+  user_name       String   @unique
+  user_password   String
+  user_created_on DateTime @default(now())
+  user_email      String   @unique
+  user_role       Role?
+}
+
+model Role {
+  role_id   Int    @id @default(autoincrement())
+  role_name String @unique
+
+  user_id   Int    @unique
+  user      User  @relation(fields: [user_id], references: [user_id])
+}
+
+// model user_role {
+//   role_id   Int    
+//   role      roles  @relation(fields: [role_id], references: [role_id])
+//   user_id   Int    @unique
+//   user      users  @relation(fields: [user_id], references: [user_id])
+// }

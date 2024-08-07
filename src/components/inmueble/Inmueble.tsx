@@ -8,7 +8,7 @@ export default function Inmueble() {
 
   const { ref, inView } = useInView({
     threshold: 0.1,
-    triggerOnce: false,
+    triggerOnce: true,
   });
 
   const properties = [
@@ -20,7 +20,8 @@ export default function Inmueble() {
       beds: 2,
       baths: 1,
       type: 'Casa',
-      ocuppied: false
+      ocuppied: true,
+      floor: "Primera planta"
     },
     {
       id: 2,
@@ -30,7 +31,8 @@ export default function Inmueble() {
       beds: 1,
       baths: 1,
       type: 'Apto.',
-      ocuppied: false
+      ocuppied: false,
+      floor: "Primera planta"
     },
     {
       id: 3,
@@ -40,7 +42,8 @@ export default function Inmueble() {
       beds: 1,
       baths: 1,
       type: 'Apto.',
-      ocuppied: true
+      ocuppied: true,
+      floor: "Segunda planta"
     },
     {
       id: 4,
@@ -50,12 +53,14 @@ export default function Inmueble() {
       beds: 1,
       baths: 1,
       type: 'Apto.',
-      ocuppied: false
+      ocuppied: false,
+      floor: "Segunda planta"
     },
   ];
 
   return (
-    <div ref={ref} className="container mx-auto px-4 md:px-6 lg:px-8">
+    <div ref={ref} className="container mx-auto px-4 md:px-6 lg:px-8 ">
+    
       <div className="flex items-center justify-between mb-6">
       <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -63,15 +68,12 @@ export default function Inmueble() {
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.7, ease: "linear" }}
             >
-        <h2 className="text-2xl md:text-3xl font-bold">Inmuebles</h2>
+         <h2 className="text-2xl md:text-3xl font-bold">Inmuebles</h2>
         </motion.div>
-        {/* <Link href="#" className="text-primary hover:underline" prefetch={false}>
-          Ver más
-        </Link> */}
       </div>
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {properties.map((property, index) => {
-          return (
+        {properties.map((property, index) => (
             <motion.div
               key={property.id}
               initial={{ opacity: 0, y: 20 }}
@@ -98,6 +100,7 @@ export default function Inmueble() {
                   <p className="text-primary font-bold text-xl">
                     Mensualidad por ₡{property.price.toLocaleString()}
                   </p>
+                  <p className="text-primary font-bold text-lg">{property.floor}</p>
                   <div className="flex items-center gap-2 mt-2 text-muted-foreground">
                     <BedIcon className="w-4 h-4" />
                     <span>{property.beds} {property.beds > 1 ? 'cuartos' : 'cuarto'}</span>
@@ -110,8 +113,7 @@ export default function Inmueble() {
               </div>
 
             </motion.div>
-          );
-        })}
+        ))}
       </div>
     </div>
   );
