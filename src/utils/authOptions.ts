@@ -1,61 +1,61 @@
-import { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import db from "@/lib/db"
+import { NextAuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import db from '@/lib/db';
 
-export const authOptions: NextAuthOptions  = {
-    providers: [
-      CredentialsProvider({
-        name: "Credentials",
-        credentials: {
-          email: { label: "Email", type: "text", placeholder: "jsmith" },
-          password: { label: "Password", type: "password", placeholder: "*****" },
-        },
-        async authorize(credentials, req): Promise<any> {
-          console.log(credentials)
-  
-          const userFound = await db.user.findUnique({
-              where: {
-                  user_email: credentials?.email
-              },
-              include: {
-                  user_role: true
-              }
-          })
-  
-          if (!userFound) throw new Error('No user found or invalid password')
-  
-          console.log(userFound)
-  
-          // const matchPassword = await bcrypt.compare(credentials.password, userFound.password)
-  
-          // if (!matchPassword) throw new Error('Wrong password')
-  
-          return {
-              id: userFound.user_id,
-              name: userFound.user_name,
-              email: userFound.user_email,
-              role: userFound.user_role?.role_id
-          }
-        },
-      }),
-    ],
-    callbacks: {
-      session: async ({ session, token }: any) => {
-        if (session?.user) {
-          session.user.id = token.sub;// token.uid or token.sub both work
-          session.user.role = token.role
-        }
-        return session;
+export const authOptions: NextAuthOptions = {
+  providers: [
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        email: { label: 'Email', type: 'text', placeholder: 'jsmith' },
+        password: { label: 'Password', type: 'password', placeholder: '*****' },
       },
-      jwt: async ({ user, token }: any) => {
-        if (user) {
-          token.sub = user.id; // token.uid or token.sub both work
-          token.role = user.role
-        }
-        return token;
+      async authorize(credentials, req): Promise<any> {
+        console.log(credentials);
+
+        const userFound = await db.user.findUnique({
+          where: {
+            user_email: credentials?.email,
+          },
+          include: {
+            user_role: true,
+          },
+        });
+
+        if (!userFound) throw new Error('No user found or invalid password');
+
+        console.log(userFound);
+
+        // const matchPassword = await bcrypt.compare(credentials.password, userFound.password)
+
+        // if (!matchPassword) throw new Error('Wrong password')
+
+        return {
+          id: userFound.user_id,
+          name: userFound.user_name,
+          email: userFound.user_email,
+          role: userFound.user_role?.role_id,
+        };
       },
+    }),
+  ],
+  callbacks: {
+    session: async ({ session, token }: any) => {
+      if (session?.user) {
+        session.user.id = token.sub; // token.uid or token.sub both work
+        session.user.role = token.role;
+      }
+      return session;
     },
-    pages: {
-      signIn: "/auth/login",
-    }
-  };
+    jwt: async ({ user, token }: any) => {
+      if (user) {
+        token.sub = user.id; // token.uid or token.sub both work
+        token.role = user.role;
+      }
+      return token;
+    },
+  },
+  pages: {
+    signIn: '/auth/login',
+  },
+};

@@ -1,24 +1,22 @@
-"use client"
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-import { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+'use client';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Textarea } from '../ui/textarea';
+import { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Contacto() {
-
-  const router = useRouter()
-  const formRef = useRef<HTMLFormElement>(null)
-  const [sent, setSent] = useState(false)
-  const [name, setName] = useState("")
-
+  const router = useRouter();
+  const formRef = useRef<HTMLFormElement>(null);
+  const [sent, setSent] = useState(false);
+  const [name, setName] = useState('');
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setSent(true)
-    const data = new FormData(event.currentTarget)
+    event.preventDefault();
+    setSent(true);
+    const data = new FormData(event.currentTarget);
 
-    console.log(JSON.stringify(data))
+    console.log(JSON.stringify(data));
 
     try {
       const response = await fetch('/api/contacto/pregunta', {
@@ -32,45 +30,41 @@ export default function Contacto() {
           pregunta_email: data.get('email'),
           pregunta_message: data.get('message'),
         }),
-      })
+      });
 
-      const newQuestion = await response.json()
+      const newQuestion = await response.json();
 
-      console.log(newQuestion)
+      console.log(newQuestion);
 
       if (response.ok) {
-        alert('Gracias por contactar con nosotros. En breve nos pondremos en contacto contigo.')
-        console.log('Gracias por contactar con nosotros. En breve nos pondremos en contacto contigo.')
-        formRef.current?.reset()
-        router.refresh()
+        alert('Gracias por contactar con nosotros. En breve nos pondremos en contacto contigo.');
+        console.log('Gracias por contactar con nosotros. En breve nos pondremos en contacto contigo.');
+        formRef.current?.reset();
+        router.refresh();
       }
-
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-
   }
 
   return (
     <div className="container mx-auto px-4 md:px-6 lg:px-8">
       <div className="mb-6">
-        <h2 className="text-2xl md:text-3xl font-bold">
-          {sent === true
-            ? `Gracias por contactarnos ${name}`
-            : "Contáctanos para más información"
-          }
+        <h2 className="text-2xl font-bold md:text-3xl">
+          {sent === true ? `Gracias por contactarnos ${name}` : 'Contáctanos para más información'}
         </h2>
       </div>
-      <div className="bg-white rounded-lg shadow-md p-6 md:p-8 lg:p-10">
-        <form onSubmit={handleSubmit}
-          ref={formRef}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="rounded-lg bg-white p-6 shadow-md md:p-8 lg:p-10">
+        <form onSubmit={handleSubmit} ref={formRef}>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-foreground">
                 Nombre
               </label>
               <Input
-                onChange={(e) => { setName(e.target.value), setSent(false) }}
+                onChange={(e) => {
+                  setName(e.target.value), setSent(false);
+                }}
                 type="text"
                 id="name"
                 name="name"
@@ -118,8 +112,7 @@ export default function Contacto() {
           <div className="mt-6">
             <Button
               type="submit"
-              className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2
-              md:px-12 md:text-base"
+              className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 md:px-12 md:text-base"
             >
               Enviar
             </Button>
@@ -127,5 +120,5 @@ export default function Contacto() {
         </form>
       </div>
     </div>
-  )
+  );
 }
