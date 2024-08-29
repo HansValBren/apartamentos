@@ -98,7 +98,7 @@ function NotificationFB({ preguntas }: { preguntas: Preguntas }) {
           <PopoverContent className="p-0">
             <Card className="border-0 shadow-none">
               <CardHeader className="border-b">
-                <img className='w-10' src='/apa.jpg' alt="logo" />
+                {/* <img className='w-10' src='/apa.jpg' alt="logo" /> */}
                 <CardTitle>
                   {newCant === 1
                     ? `(${newCant}) Nueva notificación`
